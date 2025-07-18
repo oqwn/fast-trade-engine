@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: fast-trade-engine
+  
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+logging:
+  level:
+    com.fasttrader: DEBUG
+    org.springframework.web: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+app:
+  trading:
+    price-limit-percentage: 10
+    circuit-breaker:
+      level1-percentage: 5
+      level2-percentage: 7
+    session:
+      pre-open: "09:00:00"
+      open: "09:30:00"
+      close: "15:00:00"
+      post-close: "15:30:00"
+  performance:
+    order-pool-size: 10000
+    trade-pool-size: 5000
+    disruptor-buffer-size: 65536

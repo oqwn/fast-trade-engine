@@ -29,7 +29,7 @@ services:
     image: fast-trade-engine-backend:latest
     container_name: fast-trade-backend
     ports:
-      - "8080:8080"
+      - "20010:20010"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/fasttrader
@@ -47,7 +47,7 @@ services:
       - fast-trade-net
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/api/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:20010/api/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 3

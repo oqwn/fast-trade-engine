@@ -29,7 +29,7 @@ services:
     image: fast-trade-engine-backend:dev
     container_name: fast-trade-backend-dev
     ports:
-      - "8080:8080"
+      - "20010:20010"
       - "5005:5005"  # Debug port
     environment:
       - SPRING_PROFILES_ACTIVE=dev

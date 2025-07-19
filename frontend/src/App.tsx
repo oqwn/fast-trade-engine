@@ -12,6 +12,8 @@ const Orders = lazy(() => import('@/pages/Orders'))
 const Positions = lazy(() => import('@/pages/Positions'))
 const Account = lazy(() => import('@/pages/Account'))
 const Settings = lazy(() => import('@/pages/Settings'))
+const Charts = lazy(() => import('@/pages/Charts'))
+const Leaderboard = lazy(() => import('@/pages/Leaderboard'))
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
           <Route path="/orderbook/:symbol?" element={<OrderBook />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/positions" element={<Positions />} />
+          <Route path="/charts" element={<Charts />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/account" element={<Account />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

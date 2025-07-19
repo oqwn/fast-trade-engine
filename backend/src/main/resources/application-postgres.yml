@@ -1,0 +1,117 @@
+spring:
+  application:
+    name: fast-trade-engine
+  
+  # PostgreSQL Configuration
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:fast_trade_engine}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USER:fasttrader}
+    password: ${DB_PASSWORD:fasttrader123}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      pool-name: FastTradeHikariCP
+      leak-detection-threshold: 60000
+  
+  # JPA/Hibernate Configuration for PostgreSQL
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate  # Don't auto-create schema, use our migration scripts
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 50
+          order_inserts: true
+          order_updates: true
+        cache:
+          use_second_level_cache: false
+          use_query_cache: false
+  
+  # Redis Configuration for Caching and Real-time Data
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+    database: 0
+    timeout: 2000ms
+    jedis:
+      pool:
+        max-active: 20
+        max-idle: 10
+        min-idle: 2
+        max-wait: 2000ms
+
+server:
+  port: ${SERVER_PORT:20010}
+  servlet:
+    context-path: /api
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,env,configprops
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  health:
+    db:
+      enabled: true
+    redis:
+      enabled: true
+
+logging:
+  level:
+    com.fasttrader: ${LOG_LEVEL:INFO}
+    org.springframework.web: INFO
+    org.springframework.jdbc: INFO
+    org.hibernate.SQL: ${SQL_LOG_LEVEL:WARN}
+    org.hibernate.type.descriptor.sql.BasicBinder: ${SQL_LOG_LEVEL:WARN}
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/fast-trade-engine.log
+    max-size: 100MB
+    max-history: 30
+
+app:
+  data:
+    path: ${DATA_PATH:../data/historical}
+  trading:
+    price-limit-percentage: ${PRICE_LIMIT_PCT:10}
+    circuit-breaker:
+      level1-percentage: ${CIRCUIT_BREAKER_L1:5}
+      level2-percentage: ${CIRCUIT_BREAKER_L2:7}
+      level3-percentage: ${CIRCUIT_BREAKER_L3:13}
+    session:
+      pre-open: ${SESSION_PRE_OPEN:09:00:00}
+      open: ${SESSION_OPEN:09:30:00}
+      close: ${SESSION_CLOSE:16:00:00}
+      post-close: ${SESSION_POST_CLOSE:20:00:00}
+      timezone: ${SESSION_TIMEZONE:America/New_York}
+  performance:
+    order-pool-size: ${ORDER_POOL_SIZE:10000}
+    trade-pool-size: ${TRADE_POOL_SIZE:5000}
+    disruptor-buffer-size: ${DISRUPTOR_BUFFER_SIZE:65536}
+  cache:
+    order-book-ttl: ${ORDER_BOOK_TTL:3600}  # 1 hour
+    market-data-ttl: ${MARKET_DATA_TTL:60}  # 1 minute
+    account-cache-ttl: ${ACCOUNT_CACHE_TTL:300}  # 5 minutes
+  websocket:
+    max-connections: ${WS_MAX_CONNECTIONS:1000}
+    heartbeat-interval: ${WS_HEARTBEAT:30000}  # 30 seconds
+  security:
+    jwt:
+      secret: ${JWT_SECRET:mySecretKey}
+      expiration: ${JWT_EXPIRATION:86400}  # 24 hours

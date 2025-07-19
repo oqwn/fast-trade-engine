@@ -7,7 +7,9 @@ import {
   ClipboardDocumentListIcon, 
   BriefcaseIcon,
   UserIcon,
-  Cog6ToothIcon
+  Cog6ToothIcon,
+  ChartPieIcon,
+  TrophyIcon
 } from '@heroicons/react/24/outline'
 import wsService from '@/services/websocket'
 
@@ -21,6 +23,8 @@ const navigation = [
   { name: 'Order Book', href: '/orderbook', icon: BookOpenIcon },
   { name: 'Orders', href: '/orders', icon: ClipboardDocumentListIcon },
   { name: 'Positions', href: '/positions', icon: BriefcaseIcon },
+  { name: 'Charts', href: '/charts', icon: ChartPieIcon },
+  { name: 'Leaderboard', href: '/leaderboard', icon: TrophyIcon },
   { name: 'Account', href: '/account', icon: UserIcon },
   { name: 'Settings', href: '/settings', icon: Cog6ToothIcon },
 ]

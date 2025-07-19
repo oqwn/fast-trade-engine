@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: fast-trade-postgres
+    environment:
+      POSTGRES_DB: fast_trade_engine
+      POSTGRES_USER: fasttrader
+      POSTGRES_PASSWORD: fasttrader123
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db-init-complete.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./db-sample-data.sql:/docker-entrypoint-initdb.d/02-data.sql
+    networks:
+      - fast-trade-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fasttrader -d fast_trade_engine"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: fast-trade-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - fast-trade-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: fast-trade-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@fasttrader.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - fast-trade-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: fast-trade-redis-commander
+    environment:
+      REDIS_HOSTS: local:redis:6379
+    ports:
+      - "8081:8081"
+    networks:
+      - fast-trade-network
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+networks:
+  fast-trade-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local

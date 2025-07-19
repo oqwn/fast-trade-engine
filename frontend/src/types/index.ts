@@ -95,8 +95,9 @@ export interface OrderRequest {
   accountId: string
   symbol: string
   side: 'BUY' | 'SELL'
-  type: 'LIMIT' | 'MARKET'
+  type: 'LIMIT' | 'MARKET' | 'STOP'
   price?: number
+  stopPrice?: number
   quantity: number
   clientOrderId?: string
 }

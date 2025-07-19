@@ -1,5 +1,7 @@
 package com.fasttrader.exception;
 
+import com.fasttrader.service.AccountService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,20 +16,34 @@ import java.util.Map;
 
 @Slf4j
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
+    
+    private final AccountService accountService;
     
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e) {
         log.error("Illegal argument exception: ", e);
         
-        ErrorResponse error = ErrorResponse.builder()
+        ErrorResponse.ErrorResponseBuilder errorBuilder = ErrorResponse.builder()
             .timestamp(Instant.now())
             .status(HttpStatus.BAD_REQUEST.value())
             .error("Bad Request")
-            .message(e.getMessage())
-            .build();
+            .message(e.getMessage());
         
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        // Add helpful information for account not found errors
+        if (e.getMessage() != null && e.getMessage().contains("Account not found")) {
+            try {
+                Map<String, Object> details = new HashMap<>();
+                details.put("availableAccountIds", accountService.getAllAccountIds());
+                details.put("suggestion", "Use one of the available account IDs or create a new account");
+                errorBuilder.details(details);
+            } catch (Exception ex) {
+                log.warn("Failed to get available account IDs", ex);
+            }
+        }
+        
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBuilder.build());
     }
     
     @ExceptionHandler(IllegalStateException.class)

@@ -119,4 +119,10 @@ public class AccountController {
             "timestamp", BigDecimal.valueOf(System.currentTimeMillis())
         ));
     }
+    
+    @GetMapping
+    public ResponseEntity<List<String>> getAllAccountIds() {
+        List<String> accountIds = accountService.getAllAccountIds();
+        return ResponseEntity.ok(accountIds);
+    }
 }

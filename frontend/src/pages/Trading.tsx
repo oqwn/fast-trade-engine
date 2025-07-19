@@ -25,7 +25,7 @@ export default function Trading() {
   const [quantity, setQuantity] = useState('')
   const [limitPrice, setLimitPrice] = useState('')
   const [stopPrice, setStopPrice] = useState('')
-  const [accountId] = useState('DEFAULT-001') // For demo purposes
+  const [accountId] = useState('a0000001-0001-0001-0001-000000000001') // Alice's account from sample data
 
   // Fetch available symbols
   const { data: symbols } = useQuery({

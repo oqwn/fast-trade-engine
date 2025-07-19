@@ -14,7 +14,7 @@ import {
 } from '@heroicons/react/24/outline'
 
 export default function Positions() {
-  const [accountId] = useState('DEFAULT-001') // For demo purposes
+  const [accountId] = useState('a0000001-0001-0001-0001-000000000001') // Alice's account from sample data
   const [showClosedPositions, setShowClosedPositions] = useState(false)
 
   // Fetch positions

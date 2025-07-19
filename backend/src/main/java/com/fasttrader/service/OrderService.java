@@ -117,6 +117,10 @@ public class OrderService {
         return orderRepository.findBySymbol(symbol);
     }
     
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+    
     public OrderBook getOrderBook(String symbol) {
         return matchingEngine.getOrderBook(symbol);
     }

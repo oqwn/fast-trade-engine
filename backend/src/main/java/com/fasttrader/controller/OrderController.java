@@ -58,7 +58,15 @@ public class OrderController {
         } else if (symbol != null) {
             orders = orderService.getOrdersBySymbol(symbol);
         } else {
-            return ResponseEntity.badRequest().build();
+            // Return all orders if no specific filter is provided
+            orders = orderService.getAllOrders();
+        }
+        
+        // Filter by status if provided
+        if (status != null && !status.isEmpty()) {
+            orders = orders.stream()
+                .filter(order -> order.getStatus().name().equals(status.toUpperCase()))
+                .collect(Collectors.toList());
         }
         
         List<OrderResponse> response = orders.stream()

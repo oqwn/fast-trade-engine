@@ -125,8 +125,8 @@ public class MarketSimulator {
             
             if (type == OrderType.LIMIT) {
                 double priceVariation = (random.nextDouble() - 0.5) * 0.02;
-                orderPrice = currentPrice.multiply(BigDecimal.valueOf(1 + priceVariation))
-                    .setScale(2, RoundingMode.HALF_UP);
+                orderPrice = currentPrice.multiply(BigDecimal.valueOf(1 + priceVariation));
+                orderPrice = roundToTickSize(orderPrice);
             }
             
             Long quantity = (long) ((random.nextInt(50) + 1) * 100);
@@ -156,8 +156,8 @@ public class MarketSimulator {
                 Order order = activeOrders.get(random.nextInt(activeOrders.size()));
                 
                 BigDecimal newPrice = order.getPrice().multiply(
-                    BigDecimal.valueOf(1 + (random.nextDouble() - 0.5) * 0.01))
-                    .setScale(2, RoundingMode.HALF_UP);
+                    BigDecimal.valueOf(1 + (random.nextDouble() - 0.5) * 0.01));
+                newPrice = roundToTickSize(newPrice);
                 
                 orderService.modifyOrder(order.getOrderId(), newPrice, null);
                 log.debug("Modified simulated order: {} to price {}", 
@@ -213,5 +213,31 @@ public class MarketSimulator {
     public void enableSimulation(boolean enable) {
         simulationEnabled.set(enable);
         log.info("Market simulation {}", enable ? "enabled" : "disabled");
+    }
+    
+    /**
+     * Round price to valid tick size based on price ranges
+     */
+    private BigDecimal roundToTickSize(BigDecimal price) {
+        BigDecimal tickSize;
+        
+        if (price.compareTo(new BigDecimal("0.01")) < 0) {
+            tickSize = new BigDecimal("0.0001");
+        } else if (price.compareTo(new BigDecimal("0.10")) < 0) {
+            tickSize = new BigDecimal("0.001");
+        } else if (price.compareTo(new BigDecimal("1.00")) < 0) {
+            tickSize = new BigDecimal("0.01");
+        } else if (price.compareTo(new BigDecimal("10.00")) < 0) {
+            tickSize = new BigDecimal("0.01");
+        } else if (price.compareTo(new BigDecimal("100.00")) < 0) {
+            tickSize = new BigDecimal("0.05");
+        } else if (price.compareTo(new BigDecimal("1000.00")) < 0) {
+            tickSize = new BigDecimal("0.10");
+        } else {
+            tickSize = new BigDecimal("1.00");
+        }
+        
+        // Round to nearest tick size
+        return price.divide(tickSize, 0, RoundingMode.HALF_UP).multiply(tickSize);
     }
 }

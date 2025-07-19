@@ -142,6 +142,12 @@ public class AccountService {
         return account.getPositions();
     }
     
+    public List<String> getAllAccountIds() {
+        return accountRepository.findAll().stream()
+            .map(Account::getAccountId)
+            .collect(java.util.stream.Collectors.toList());
+    }
+    
     @Transactional
     public void deposit(String accountId, BigDecimal amount) {
         Account account = accountRepository.findById(accountId)

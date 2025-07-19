@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { accountApi, marketDataApi } from '@/services/api'
 import { Position, MarketData } from '@/types'
@@ -14,8 +14,21 @@ import {
 } from '@heroicons/react/24/outline'
 
 export default function Positions() {
-  const [accountId] = useState('a0000001-0001-0001-0001-000000000001') // Alice's account from sample data
+  const [accountId, setAccountId] = useState<string>('')
   const [showClosedPositions, setShowClosedPositions] = useState(false)
+
+  // Fetch available accounts
+  const { data: availableAccounts } = useQuery({
+    queryKey: ['available-accounts'],
+    queryFn: accountApi.getAllAccountIds,
+  })
+
+  // Set first available account as default
+  useEffect(() => {
+    if (availableAccounts && availableAccounts.length > 0 && !accountId) {
+      setAccountId(availableAccounts[0])
+    }
+  }, [availableAccounts, accountId])
 
   // Fetch positions
   const { data: positions, isLoading: positionsLoading, refetch } = useQuery({
@@ -98,13 +111,33 @@ export default function Positions() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             Portfolio Positions
           </h1>
-          <button
-            onClick={() => refetch()}
-            className="btn-secondary flex items-center"
-          >
-            <ArrowPathIcon className="h-4 w-4 mr-2" />
-            Refresh
-          </button>
+          <div className="flex items-center space-x-4">
+            {/* Account Selector */}
+            <div className="flex items-center space-x-2">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Account:
+              </label>
+              <select
+                value={accountId}
+                onChange={(e) => setAccountId(e.target.value)}
+                className="input"
+              >
+                <option value="">Select account</option>
+                {availableAccounts?.map((id) => (
+                  <option key={id} value={id}>
+                    {id}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button
+              onClick={() => refetch()}
+              className="btn-secondary flex items-center"
+            >
+              <ArrowPathIcon className="h-4 w-4 mr-2" />
+              Refresh
+            </button>
+          </div>
         </div>
 
         {/* Portfolio Summary */}

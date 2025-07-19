@@ -157,6 +157,11 @@ export const marketDataApi = {
 
 // Account APIs
 export const accountApi = {
+  getAllAccountIds: async (): Promise<string[]> => {
+    const { data } = await api.get('/accounts')
+    return data
+  },
+
   createAccount: async (account: {
     accountId: string
     accountName: string

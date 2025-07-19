@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { marketDataApi, orderApi } from '@/services/api'
+import { marketDataApi, orderApi, accountApi } from '@/services/api'
 import { OrderRequest } from '@/types'
 import toast from 'react-hot-toast'
 import { 
@@ -25,13 +25,26 @@ export default function Trading() {
   const [quantity, setQuantity] = useState('')
   const [limitPrice, setLimitPrice] = useState('')
   const [stopPrice, setStopPrice] = useState('')
-  const [accountId] = useState('a0000001-0001-0001-0001-000000000001') // Alice's account from sample data
+  const [accountId, setAccountId] = useState<string>('')
 
   // Fetch available symbols
   const { data: symbols } = useQuery({
     queryKey: ['available-symbols'],
     queryFn: marketDataApi.getAvailableSymbols,
   })
+
+  // Fetch available accounts
+  const { data: availableAccounts } = useQuery({
+    queryKey: ['available-accounts'],
+    queryFn: accountApi.getAllAccountIds,
+  })
+
+  // Set first available account as default
+  useEffect(() => {
+    if (availableAccounts && availableAccounts.length > 0 && !accountId) {
+      setAccountId(availableAccounts[0])
+    }
+  }, [availableAccounts, accountId])
 
   // Fetch market data for selected symbol
   const { data: marketData } = useQuery({
@@ -130,6 +143,26 @@ export default function Trading() {
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Account Selection */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Trading Account
+                </label>
+                <select
+                  value={accountId}
+                  onChange={(e) => setAccountId(e.target.value)}
+                  className="input w-full"
+                  required
+                >
+                  <option value="">Select an account</option>
+                  {availableAccounts?.map((id) => (
+                    <option key={id} value={id}>
+                      {id}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {/* Symbol Selection */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

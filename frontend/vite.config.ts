@@ -39,7 +39,7 @@ export default defineConfig({
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'chart-vendor': ['chart.js', 'react-chartjs-2'],
-          'utils-vendor': ['axios', 'date-fns', 'socket.io-client'],
+          'utils-vendor': ['axios', 'date-fns', '@stomp/stompjs'],
         },
       },
     },

@@ -148,6 +148,11 @@ export const marketDataApi = {
     })
     return data
   },
+
+  getAvailableSymbols: async (): Promise<string[]> => {
+    const { data } = await api.get('/market-data/symbols')
+    return data
+  },
 }
 
 // Account APIs

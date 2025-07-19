@@ -1,5 +1,4 @@
 import { Client, IMessage, StompSubscription } from '@stomp/stompjs'
-import { WebSocketMessage } from '@/types'
 
 class WebSocketService {
   private client: Client | null = null

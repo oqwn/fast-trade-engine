@@ -3,19 +3,23 @@
 # Build stage
 FROM node:20-alpine AS builder
 
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json ./
+COPY pnpm-lock.yaml* ./
 
 # Install dependencies
-RUN npm ci
+RUN pnpm install --frozen-lockfile
 
 # Copy source code
 COPY . .
 
 # Build the application
-RUN npm run build
+RUN pnpm run build
 
 # Production stage
 FROM nginx:alpine

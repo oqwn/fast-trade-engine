@@ -1,15 +1,19 @@
 FROM node:20-alpine
 
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
 WORKDIR /app
 
 # Install development tools
 RUN apk add --no-cache git
 
 # Copy package files
-COPY package*.json ./
+COPY package.json ./
+COPY pnpm-lock.yaml* ./
 
 # Install dependencies
-RUN npm install
+RUN pnpm install
 
 # Expose development server port
 EXPOSE 3000
@@ -18,4 +22,4 @@ EXPOSE 3000
 ENV NODE_ENV=development
 
 # Development command
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+CMD ["pnpm", "run", "dev", "--", "--host", "0.0.0.0"]

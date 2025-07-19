@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "Frontend for Fast Trade Engine - High-performance electronic trading system",
   "private": true,
+  "packageManager": "pnpm@8.14.0",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

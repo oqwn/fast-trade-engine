@@ -26,7 +26,7 @@ fast-trade-engine/
 ### Prerequisites
 
 - Docker & Docker Compose
-- Node.js 20+ (for local frontend development)
+- Node.js 20+ and pnpm (for local frontend development)
 - Java 17+ (for local backend development)
 - Make (optional, for using Makefile commands)
 
@@ -76,8 +76,8 @@ mvn spring-boot:run
 
 ```bash
 cd frontend
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 ## 🌐 Service URLs
@@ -166,9 +166,9 @@ mvn jacoco:report          # Coverage report
 
 ```bash
 cd frontend
-npm test                   # Unit tests
-npm run test:coverage      # With coverage
-npm run test:ui           # Interactive UI
+pnpm test                   # Unit tests
+pnpm run test:coverage      # With coverage
+pnpm run test:ui           # Interactive UI
 ```
 
 ## 📊 Monitoring & Observability
@@ -264,7 +264,7 @@ helm install fast-trade-engine ./helm-chart
 
 - **Architecture**: [architecture.md](architecture.md)
 - **API Documentation**: http://localhost:8080/api/swagger-ui.html
-- **Frontend Storybook**: Run `npm run storybook` in frontend/
+- **Frontend Storybook**: Run `pnpm run storybook` in frontend/
 - **CI/CD Guide**: [CI-CD-README.md](CI-CD-README.md)
 
 ## 🤝 Contributing

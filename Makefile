@@ -22,7 +22,7 @@ install:
 	@echo "Installing backend dependencies..."
 	cd backend && mvn clean install -DskipTests
 	@echo "Installing frontend dependencies..."
-	cd frontend && npm install
+	cd frontend && pnpm install
 
 # Build everything
 build: backend-build frontend-build
@@ -52,7 +52,7 @@ stop:
 # Clean everything
 clean: stop
 	cd backend && mvn clean
-	cd frontend && rm -rf node_modules dist
+	cd frontend && rm -rf node_modules dist pnpm-lock.yaml
 	docker system prune -f
 
 # Linting
@@ -92,19 +92,19 @@ backend-docker:
 
 # Frontend specific commands
 frontend-build:
-	cd frontend && npm run build
+	cd frontend && pnpm run build
 
 frontend-test:
-	cd frontend && npm test
+	cd frontend && pnpm test
 
 frontend-run:
-	cd frontend && npm run dev
+	cd frontend && pnpm run dev
 
 frontend-lint:
-	cd frontend && npm run lint
+	cd frontend && pnpm run lint
 
 frontend-format:
-	cd frontend && npm run format
+	cd frontend && pnpm run format
 
 frontend-docker:
 	docker build -t fast-trade-engine-frontend:latest ./frontend
@@ -140,7 +140,7 @@ benchmark:
 # Generate documentation
 docs:
 	cd backend && mvn javadoc:javadoc
-	cd frontend && npm run build-storybook
+	cd frontend && pnpm run build-storybook
 
 # Docker compose override for different environments
 dev-with-monitoring:

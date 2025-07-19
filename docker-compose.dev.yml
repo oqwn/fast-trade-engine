@@ -19,7 +19,7 @@ services:
       - backend
     networks:
       - fast-trade-dev-net
-    command: npm run dev
+    command: pnpm run dev
 
   # Backend development with hot reload
   backend:

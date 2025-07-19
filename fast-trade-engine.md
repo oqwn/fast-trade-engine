@@ -52,6 +52,10 @@
 - [x] GET /api/orders - Query orders endpoint
 - [x] GET /api/orderbook/{symbol} - Get order book
 - [x] GET /api/trades - Query trades endpoint
+- [x] GET /api/accounts - Get all account IDs endpoint
+- [x] GET /api/accounts/{id}/positions - Get account positions
+- [x] GET /api/market-data/quotes - Get all market quotes
+- [x] GET /api/market-data/symbols - Get available symbols
 - [ ] Add API authentication/session management
 
 ## Phase 4: Real-time Features (Week 7-8)
@@ -81,6 +85,8 @@
 - [x] Implement fund management (available/frozen)
 - [x] Add position tracking
 - [x] Build P&L calculation (realized/unrealized)
+- [x] Add dynamic account selection API
+- [x] Implement account listing endpoint
 - [ ] Implement T+1 settlement rules
 - [ ] Add transaction history
 
@@ -133,12 +139,14 @@
 
 ### Web Interface
 
-- [ ] Create basic trading UI
-- [ ] Build order book visualization
-- [ ] Add price chart (candlestick)
-- [ ] Implement trade blotter
-- [ ] Create position dashboard
-- [ ] Add P&L charts
+- [x] Create basic trading UI
+- [x] Build order book visualization
+- [x] Add price chart (candlestick)
+- [x] Implement trade blotter
+- [x] Create position dashboard
+- [x] Add P&L charts
+- [x] Implement dynamic account selection
+- [x] Add real-time market data integration
 
 ### Monitoring Dashboard
 

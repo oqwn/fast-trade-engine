@@ -9,9 +9,9 @@
 
 ### Summary Statistics
 - **Total User Stories**: 67
-- **✅ Completed**: 12 stories (18%)
+- **✅ Completed**: 14 stories (21%)
 - **✅ (UI Ready)**: 4 stories (6%)
-- **⏳ Pending**: 51 stories (76%)
+- **⏳ Pending**: 49 stories (73%)
 
 ### ✅ Completed Features (Frontend Ready)
 - **Trading Interface**: Market/Limit/Stop order forms, real-time bid/ask spreads
@@ -21,6 +21,8 @@
 - **Gamification**: Leaderboard with rankings and performance metrics
 - **Real-time Updates**: WebSocket integration for live data
 - **API Access**: Well-documented frontend API integration
+- **Dynamic Account Management**: Account selection with backend integration
+- **Professional Trading Tools**: Real-time market data and order execution
 
 ### ✅ (UI Ready) - Awaiting Backend Integration
 - **Stop-Loss Orders**: UI complete, needs matching engine support
@@ -56,6 +58,7 @@
 - ✅ **As a** risk-averse trader, **I want to** see my real-time P&L **so that** I know when to cut losses or take profits.
 - ✅ **As a** long-term investor, **I want to** track my cost basis **so that** I can make informed decisions about averaging down.
 - ✅ **As a** active trader, **I want to** see my daily trading volume **so that** I can manage my trading frequency.
+- ✅ **As a** multi-account trader, **I want to** switch between different trading accounts **so that** I can manage separate strategies or clients.
 
 ## 👨‍🎓 Student & Educator Stories
 
@@ -138,6 +141,7 @@
 
 - ✅ **As a** backend developer, **I want to** access a well-documented API **so that** I can build trading applications.
 - ✅ **As a** frontend developer, **I want to** receive WebSocket market data **so that** I can create real-time UIs.
+- ✅ **As a** integration developer, **I want to** dynamically fetch available accounts **so that** I can build scalable multi-tenant applications.
 - ⏳ **As a** DevOps engineer, **I want to** monitor system performance **so that** I can ensure high availability.
 - ⏳ **As a** open source contributor, **I want to** add new order types **so that** I can enhance the platform.
 

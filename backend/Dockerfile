@@ -1,7 +1,7 @@
 # Multi-stage build for optimized production image
 
 # Build stage
-FROM maven:3.9.5-eclipse-temurin-17-alpine AS build
+FROM maven:3.9.5-eclipse-temurin-21-alpine AS build
 
 WORKDIR /app
 
@@ -18,7 +18,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests -B
 
 # Production stage
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 
 # Add metadata
 LABEL maintainer="Fast Trade Engine Team"

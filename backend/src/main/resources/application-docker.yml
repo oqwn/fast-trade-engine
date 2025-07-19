@@ -39,7 +39,7 @@ spring:
         min-idle: 0
 
 server:
-  port: 8080
+  port: 20010
   servlet:
     context-path: /api
   compression:

@@ -27,7 +27,7 @@ fast-trade-engine/
 
 - Docker & Docker Compose
 - Node.js 20+ and pnpm (for local frontend development)
-- Java 17+ (for local backend development)
+- Java 21+ (for local backend development)
 - Make (optional, for using Makefile commands)
 
 ### Using Make (Recommended)

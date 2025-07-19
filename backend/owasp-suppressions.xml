@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+    
+    <!-- Suppress false positives for development dependencies -->
+    <suppress>
+        <notes><![CDATA[
+        H2 database is only used for development and testing
+        ]]></notes>
+        <gav regex="true">^com\.h2database:h2:.*$</gav>
+        <cve>CVE-2018-10054</cve>
+        <cve>CVE-2018-14335</cve>
+    </suppress>
+    
+    <!-- Suppress Spring Boot dev tools -->
+    <suppress>
+        <notes><![CDATA[
+        Spring Boot DevTools is only used in development
+        ]]></notes>
+        <gav regex="true">^org\.springframework\.boot:spring-boot-devtools:.*$</gav>
+    </suppress>
+    
+    <!-- Suppress test scope dependencies -->
+    <suppress>
+        <notes><![CDATA[
+        Test dependencies are not shipped in production
+        ]]></notes>
+        <gav regex="true">^.*:.*:.*:test$</gav>
+    </suppress>
+    
+    <!-- Suppress Lombok compile-time only -->
+    <suppress>
+        <notes><![CDATA[
+        Lombok is compile-time only
+        ]]></notes>
+        <gav regex="true">^org\.projectlombok:lombok:.*$</gav>
+    </suppress>
+    
+</suppressions>

@@ -1,0 +1,107 @@
+spring:
+  application:
+    name: fast-trade-engine
+  
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://postgres:5432/fasttrader}
+    username: ${SPRING_DATASOURCE_USERNAME:fasttrader}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+        batch_versioned_data: true
+  
+  redis:
+    host: ${REDIS_HOST:redis}
+    port: ${REDIS_PORT:6379}
+    timeout: 2000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+  http2:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,env
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5, 0.95, 0.99
+      sla:
+        http.server.requests: 100ms, 500ms, 1s
+
+logging:
+  level:
+    com.fasttrader: INFO
+    org.springframework.web: WARN
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] %logger{36} - %msg%n"
+  file:
+    name: /app/logs/fast-trade-engine.log
+    max-size: 100MB
+    max-history: 30
+
+app:
+  trading:
+    price-limit-percentage: 10
+    circuit-breaker:
+      level1-percentage: 5
+      level2-percentage: 7
+    session:
+      pre-open: "09:00:00"
+      open: "09:30:00"
+      close: "15:00:00"
+      post-close: "15:30:00"
+  performance:
+    order-pool-size: 10000
+    trade-pool-size: 5000
+    disruptor-buffer-size: 65536
+  monitoring:
+    enabled: true
+    metrics-interval: 5s
+  simulation:
+    enabled: ${SIMULATION_ENABLED:true}
+    accounts: 4
+    symbols: "AAPL,GOOGL,MSFT,AMZN,TSLA"

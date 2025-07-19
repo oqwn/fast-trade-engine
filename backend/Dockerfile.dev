@@ -1,0 +1,25 @@
+# Development Dockerfile with hot reload
+FROM maven:3.9.5-eclipse-temurin-17
+
+WORKDIR /app
+
+# Install development tools
+RUN apt-get update && apt-get install -y \
+    curl \
+    vim \
+    htop \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy pom.xml and download dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Expose application and debug ports
+EXPOSE 8080 5005
+
+# Set development environment
+ENV SPRING_PROFILES_ACTIVE=dev
+ENV MAVEN_OPTS="-Xmx1024m"
+
+# Development command with debug enabled
+CMD ["mvn", "spring-boot:run", "-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"]

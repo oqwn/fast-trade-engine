@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Exclude generated files -->
+    <Match>
+        <Source name="~.*target[\\/].*"/>
+    </Match>
+    
+    <!-- Exclude test files from certain checks -->
+    <Match>
+        <Class name="~.*Test$"/>
+        <Bug pattern="DM_EXIT"/>
+    </Match>
+    
+    <!-- Exclude Lombok generated code -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP"/>
+        <Class name="~.*\.(model|dto)\..*"/>
+    </Match>
+    
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+        <Class name="~.*\.(model|dto)\..*"/>
+    </Match>
+    
+    <!-- Exclude Spring Boot configuration -->
+    <Match>
+        <Class name="~.*Config$"/>
+        <Bug pattern="URF_UNREAD_FIELD"/>
+    </Match>
+    
+    <!-- Exclude false positives for Spring annotations -->
+    <Match>
+        <Bug pattern="UWF_UNWRITTEN_FIELD"/>
+        <Class name="~.*Controller$"/>
+    </Match>
+    
+    <Match>
+        <Bug pattern="UWF_UNWRITTEN_FIELD"/>
+        <Class name="~.*Service$"/>
+    </Match>
+    
+    <!-- Exclude serialization warnings for DTOs -->
+    <Match>
+        <Bug pattern="SE_NO_SERIALVERSIONID"/>
+        <Class name="~.*\.(dto|model)\..*"/>
+    </Match>
+    
+    <!-- Exclude thread safety warnings for concurrent collections -->
+    <Match>
+        <Bug pattern="IS2_INCONSISTENT_SYNC"/>
+        <Class name="~.*OrderBook$"/>
+    </Match>
+    
+    <!-- Performance false positives -->
+    <Match>
+        <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON"/>
+        <Class name="~.*Lambda.*"/>
+    </Match>
+</FindBugsFilter>

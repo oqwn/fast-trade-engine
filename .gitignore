@@ -1,0 +1,66 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backend (Java/Maven)
+backend/target/
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+backend/*.log
+backend/logs/
+backend/.env
+
+# Frontend (Node/React)
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env.local
+frontend/.env.*.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/coverage/
+frontend/.nyc_output/
+
+# Docker
+.docker/
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+*~
+
+# Environment files
+.env
+.env.*
+
+# Logs
+logs/
+*.log
+
+# Testing
+test-results/
+playwright-report/
+
+# Documentation build
+docs/_build/
+docs/.docusaurus/
+
+# Monitoring data
+prometheus-data/
+grafana-data/
+
+# Keep CLAUDE.md
+CLAUDE.md

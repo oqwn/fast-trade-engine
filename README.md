@@ -1,205 +1,286 @@
-# Fast Trade Engine
+# Fast Trade Engine - Full Stack Application
 
-A high-performance electronic trading system built with Java and Spring Boot, designed to simulate real-world stock exchange functionality.
+A high-performance electronic trading system with separate frontend and backend applications.
 
-## Features
+## 🏗️ Project Structure
 
-- **Order Matching Engine**: Price-time priority matching algorithm
-- **Order Types**: Market, Limit orders (with extensibility for advanced types)
-- **Real-time Updates**: WebSocket support for live market data and order updates
-- **REST API**: Comprehensive API for order management and market data
-- **Account Management**: Balance tracking, position management, P&L calculation
-- **Market Data**: Level 1 & 2 quotes, trade feed, OHLC data
-- **Risk Management**: Pre-trade validation, price limits, circuit breakers
-- **Market Simulation**: Built-in market maker bots for testing
-
-## Architecture
-
-See [architecture.md](architecture.md) for detailed system design.
-
-## Requirements
-
-- Java 17 or higher
-- Maven 3.6 or higher
-
-## Getting Started
-
-### Build the project
-
-```bash
-mvn clean install
+```
+fast-trade-engine/
+├── frontend/               # React TypeScript frontend
+│   ├── src/               # Source code
+│   ├── public/            # Static assets
+│   ├── package.json       # Node dependencies
+│   └── Dockerfile         # Frontend container
+├── backend/               # Java Spring Boot backend
+│   ├── src/               # Source code
+│   ├── pom.xml           # Maven dependencies
+│   └── Dockerfile         # Backend container
+├── docker-compose.yml     # Production orchestration
+├── docker-compose.dev.yml # Development orchestration
+├── Makefile              # Build automation
+└── .github/              # CI/CD workflows
 ```
 
-### Run the application
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Docker & Docker Compose
+- Node.js 20+ (for local frontend development)
+- Java 17+ (for local backend development)
+- Make (optional, for using Makefile commands)
+
+### Using Make (Recommended)
 
 ```bash
+# Install all dependencies
+make install
+
+# Start development environment
+make dev
+
+# Start production environment
+make prod
+
+# Run all tests
+make test
+
+# View logs
+make logs
+```
+
+### Using Docker Compose
+
+```bash
+# Development environment with hot reload
+docker-compose -f docker-compose.dev.yml up
+
+# Production environment
+docker-compose up -d
+
+# Scale backend instances
+docker-compose up -d --scale backend=3
+```
+
+### Manual Setup
+
+#### Backend
+
+```bash
+cd backend
+mvn clean install
 mvn spring-boot:run
 ```
 
-The application will start on `http://localhost:8080/api`
+#### Frontend
 
-### Access H2 Console
-
-The H2 database console is available at: `http://localhost:8080/api/h2-console`
-- JDBC URL: `jdbc:h2:mem:testdb`
-- Username: `sa`
-- Password: (leave empty)
-
-## API Documentation
-
-### Order Management
-
-#### Place Order
 ```bash
-POST /api/orders
-Content-Type: application/json
-
-{
-  "accountId": "TRADER001",
-  "symbol": "AAPL",
-  "side": "BUY",
-  "type": "LIMIT",
-  "price": 150.50,
-  "quantity": 100
-}
+cd frontend
+npm install
+npm run dev
 ```
 
-#### Cancel Order
+## 🌐 Service URLs
+
+### Development
+
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8080/api
+- **H2 Console**: http://localhost:8080/api/h2-console
+- **Mailhog**: http://localhost:8025
+
+### Production
+
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8080/api
+- **Prometheus**: http://localhost:9090
+- **Grafana**: http://localhost:3001 (admin/admin)
+
+## 🏗️ Architecture Overview
+
+### Frontend (React + TypeScript)
+
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **State Management**: Zustand
+- **API Client**: Axios with React Query
+- **Real-time**: Socket.io Client
+- **Charts**: Chart.js
+- **Routing**: React Router v6
+
+### Backend (Java + Spring Boot)
+
+- **Framework**: Spring Boot 3.x
+- **Language**: Java 17
+- **Database**: PostgreSQL (H2 for dev)
+- **Cache**: Redis
+- **Message Queue**: Disruptor
+- **API**: RESTful + WebSocket
+- **Monitoring**: Micrometer + Prometheus
+
+## 📦 Key Features
+
+### Trading Engine
+
+- High-performance order matching
+- Real-time market data streaming
+- Multiple order types (Market, Limit)
+- Price-time priority matching
+- Circuit breakers and price limits
+
+### Frontend Features
+
+- Real-time order book visualization
+- Interactive trading interface
+- Portfolio management dashboard
+- Live market data charts
+- WebSocket notifications
+
+### Infrastructure
+
+- Containerized deployment
+- Horizontal scaling support
+- Health checks and monitoring
+- Automated CI/CD pipeline
+- Security scanning
+
+## 🧪 Testing
+
+### Run All Tests
+
 ```bash
-DELETE /api/orders/{orderId}
+make test
 ```
 
-#### Get Order Book
+### Backend Tests
+
 ```bash
-GET /api/orders/book/{symbol}?depth=10
+cd backend
+mvn test                    # Unit tests
+mvn verify                  # Integration tests
+mvn jacoco:report          # Coverage report
 ```
 
-### Market Data
+### Frontend Tests
 
-#### Get Quote
 ```bash
-GET /api/market-data/quote/{symbol}?depth=5
+cd frontend
+npm test                   # Unit tests
+npm run test:coverage      # With coverage
+npm run test:ui           # Interactive UI
 ```
 
-#### Get Recent Trades
+## 📊 Monitoring & Observability
+
+### Metrics
+
+- Application metrics exposed at `/api/actuator/prometheus`
+- Custom trading metrics (orders/sec, latency, etc.)
+- JVM and system metrics
+
+### Dashboards
+
+1. Access Grafana at http://localhost:3001
+2. Import provided dashboards from `backend/monitoring/grafana/dashboards/`
+3. View real-time metrics and alerts
+
+### Logs
+
 ```bash
-GET /api/trades/recent/{symbol}?limit=50
+# All services
+make logs
+
+# Specific service
+docker-compose logs -f backend
+docker-compose logs -f frontend
 ```
 
-#### Get OHLC Data
+## 🔧 Development
+
+### Code Style
+
+- Backend: Google Java Style Guide
+- Frontend: ESLint + Prettier
+
+### Hot Reload
+
+Both frontend and backend support hot reload in development mode:
+
 ```bash
-GET /api/market-data/ohlc/{symbol}?interval=1m&periods=100
+# Start with hot reload
+make dev
 ```
 
-### Account Management
+### Debugging
 
-#### Create Account
+#### Backend (Port 5005)
+
 ```bash
-POST /api/accounts
-Content-Type: application/json
-
-{
-  "accountId": "TRADER001",
-  "accountName": "Test Trader",
-  "initialBalance": 100000
-}
+# Connect debugger to localhost:5005
+docker-compose -f docker-compose.dev.yml up backend
 ```
 
-#### Get Account Balance
+#### Frontend
+
+Use browser DevTools with React Developer Tools extension
+
+## 🚢 Deployment
+
+### Build Images
+
 ```bash
-GET /api/accounts/{accountId}/balance
+# Build all images
+docker-compose build
+
+# Build specific service
+docker-compose build backend
+docker-compose build frontend
 ```
 
-#### Get Positions
+### Production Deployment
+
 ```bash
-GET /api/accounts/{accountId}/positions
+# Deploy with Docker Compose
+docker-compose up -d
+
+# Deploy with Kubernetes
+kubectl apply -f k8s/
+
+# Deploy with Helm
+helm install fast-trade-engine ./helm-chart
 ```
 
-## WebSocket Endpoints
+## 🔐 Security
 
-Connect to WebSocket at: `ws://localhost:8080/api/ws`
+- Non-root container execution
+- Security scanning in CI/CD
+- OWASP dependency checks
+- Rate limiting on APIs
+- Input validation
+- CORS configuration
 
-### Subscribe to Market Data
-- `/topic/marketdata/{symbol}` - Real-time quotes
-- `/topic/orderbook/{symbol}` - Order book updates
-- `/topic/trades/{symbol}` - Trade feed
-- `/topic/trades` - All trades
+## 📚 Documentation
 
-### Subscribe to Order Updates
-- `/topic/orders/{accountId}` - Order status updates
-- `/queue/orders` - Personal order updates (requires authentication)
-- `/queue/notifications` - Order notifications
+- **Architecture**: [architecture.md](architecture.md)
+- **API Documentation**: http://localhost:8080/api/swagger-ui.html
+- **Frontend Storybook**: Run `npm run storybook` in frontend/
+- **CI/CD Guide**: [CI-CD-README.md](CI-CD-README.md)
 
-## Market Simulation
+## 🤝 Contributing
 
-The application includes a market simulator that automatically:
-- Creates test accounts with initial balance
-- Places initial orders to create market depth
-- Simulates trading activity with market maker bots
-- Generates realistic price movements
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
 
-The simulation starts automatically when the application launches.
+## 📝 License
 
-## Configuration
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-Key configuration properties in `application.yml`:
+## 🙏 Acknowledgments
 
-```yaml
-app:
-  trading:
-    price-limit-percentage: 10
-    circuit-breaker:
-      level1-percentage: 5
-      level2-percentage: 7
-```
-
-## Testing
-
-### Run all tests
-```bash
-mvn test
-```
-
-### Run with specific profile
-```bash
-mvn spring-boot:run -Dspring.profiles.active=dev
-```
-
-## Performance
-
-The system is designed for high throughput and low latency:
-- Target: 100,000+ orders per second
-- Sub-millisecond matching latency
-- Lock-free data structures where possible
-- Memory-optimized with object pooling
-
-## Development
-
-### Project Structure
-```
-src/main/java/com/fasttrader/
-├── engine/          # Core matching engine
-├── model/           # Domain models
-├── service/         # Business logic
-├── controller/      # REST API endpoints
-├── websocket/       # WebSocket handlers
-├── repository/      # Data access layer
-├── config/          # Configuration
-└── exception/       # Exception handling
-```
-
-### Adding New Features
-
-1. **New Order Types**: Extend the `Order` class and update `MatchingEngine`
-2. **New Market Data**: Add to `MarketDataService` and create WebSocket publishers
-3. **New Validations**: Add to `ValidationService`
-
-## Monitoring
-
-- Health check: `GET /api/actuator/health`
-- Metrics: `GET /api/actuator/metrics`
-- Prometheus: `GET /api/actuator/prometheus`
-
-## License
-
-This is a demonstration project for educational purposes.
+- Built with modern best practices
+- Inspired by real-world trading systems
+- Optimized for performance and scalability

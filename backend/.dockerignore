@@ -1,0 +1,48 @@
+# Git
+.git
+.gitignore
+
+# Maven
+target/
+!target/*.jar
+.mvn/
+mvnw
+mvnw.cmd
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Documentation
+*.md
+docs/
+
+# CI/CD
+.github/
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Test files
+src/test/
+
+# Temporary files
+*.tmp
+*.swp
+*.bak

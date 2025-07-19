@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+
+<suppressions>
+    <!-- Suppress checks for generated files -->
+    <suppress files=".*[\\/]target[\\/].*" checks=".*"/>
+    
+    <!-- Suppress checks for test files -->
+    <suppress files=".*Test\.java" checks="MagicNumber"/>
+    <suppress files=".*Test\.java" checks="MethodLength"/>
+    
+    <!-- Suppress design for extension in data models -->
+    <suppress files=".*[\\/]model[\\/].*\.java" checks="DesignForExtension"/>
+    <suppress files=".*[\\/]dto[\\/].*\.java" checks="DesignForExtension"/>
+    
+    <!-- Suppress visibility modifier for Lombok classes -->
+    <suppress files=".*\.java" checks="VisibilityModifier" message=".*@lombok\.Data.*"/>
+    <suppress files=".*\.java" checks="VisibilityModifier" message=".*@Data.*"/>
+    
+    <!-- Suppress hidden field for Lombok builders -->
+    <suppress files=".*\.java" checks="HiddenField" message=".*@Builder.*"/>
+    
+    <!-- Suppress final parameters for Spring components -->
+    <suppress files=".*Controller\.java" checks="FinalParameters"/>
+    <suppress files=".*Service\.java" checks="FinalParameters"/>
+    <suppress files=".*Repository\.java" checks="FinalParameters"/>
+    
+    <!-- Suppress TODO comments in development -->
+    <suppress files=".*\.java" checks="TodoComment"/>
+</suppressions>

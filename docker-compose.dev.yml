@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # Frontend development with hot reload
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    image: fast-trade-engine-frontend:dev
+    container_name: fast-trade-frontend-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+    networks:
+      - fast-trade-dev-net
+    command: npm run dev
+
+  # Backend development with hot reload
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    image: fast-trade-engine-backend:dev
+    container_name: fast-trade-backend-dev
+    ports:
+      - "8080:8080"
+      - "5005:5005"  # Debug port
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:h2:mem:testdb
+      - SPRING_DEVTOOLS_RESTART_ENABLED=true
+      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    volumes:
+      - ./backend:/app
+      - ~/.m2:/root/.m2
+      - backend-dev-logs:/app/logs
+    networks:
+      - fast-trade-dev-net
+    command: mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+
+  # MailHog for email testing
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: fast-trade-mailhog
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - fast-trade-dev-net
+
+volumes:
+  backend-dev-logs:
+
+networks:
+  fast-trade-dev-net:
+    driver: bridge

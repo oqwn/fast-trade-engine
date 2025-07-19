@@ -1,0 +1,21 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install development tools
+RUN apk add --no-cache git
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Expose development server port
+EXPOSE 3000
+
+# Set environment
+ENV NODE_ENV=development
+
+# Development command
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

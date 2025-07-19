@@ -114,3 +114,38 @@ export interface Notification {
   message: string
   timestamp: number
 }
+
+export interface OHLC {
+  timestamp: string
+  open: number
+  high: number
+  low: number
+  close: number
+  volume: number
+}
+
+export interface OHLCResponse {
+  symbol: string
+  interval: string
+  data: OHLC[]
+}
+
+export interface BalanceResponse {
+  balance: number
+  availableBalance: number
+  frozenBalance: number
+}
+
+export interface EquityResponse {
+  totalEquity: number
+  timestamp: number
+}
+
+export interface DepositWithdrawRequest {
+  amount: number
+}
+
+export interface ModifyOrderRequest {
+  price?: number
+  quantity?: number
+}

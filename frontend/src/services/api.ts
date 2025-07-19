@@ -8,6 +8,11 @@ import type {
   Account,
   Position,
   OrderRequest,
+  OHLCResponse,
+  BalanceResponse,
+  EquityResponse,
+  DepositWithdrawRequest,
+  ModifyOrderRequest,
 } from '@/types'
 
 const API_BASE_URL = '/api'
@@ -79,7 +84,7 @@ export const orderApi = {
 
   modifyOrder: async (
     orderId: string,
-    updates: { price?: number; quantity?: number }
+    updates: ModifyOrderRequest
   ): Promise<Order> => {
     const { data } = await api.put(`/orders/${orderId}`, updates)
     return data
@@ -137,7 +142,7 @@ export const marketDataApi = {
     symbol: string,
     interval = '1m',
     periods = 100
-  ): Promise<any> => {
+  ): Promise<OHLCResponse> => {
     const { data } = await api.get(`/market-data/ohlc/${symbol}`, {
       params: { interval, periods },
     })
@@ -161,13 +166,7 @@ export const accountApi = {
     return data
   },
 
-  getBalance: async (
-    accountId: string
-  ): Promise<{
-    balance: number
-    availableBalance: number
-    frozenBalance: number
-  }> => {
+  getBalance: async (accountId: string): Promise<BalanceResponse> => {
     const { data } = await api.get(`/accounts/${accountId}/balance`)
     return data
   },
@@ -179,27 +178,21 @@ export const accountApi = {
 
   deposit: async (
     accountId: string,
-    amount: number
+    request: DepositWithdrawRequest
   ): Promise<{ message: string }> => {
-    const { data } = await api.post(`/accounts/${accountId}/deposit`, {
-      amount,
-    })
+    const { data } = await api.post(`/accounts/${accountId}/deposit`, request)
     return data
   },
 
   withdraw: async (
     accountId: string,
-    amount: number
+    request: DepositWithdrawRequest
   ): Promise<{ message: string }> => {
-    const { data } = await api.post(`/accounts/${accountId}/withdraw`, {
-      amount,
-    })
+    const { data } = await api.post(`/accounts/${accountId}/withdraw`, request)
     return data
   },
 
-  getTotalEquity: async (
-    accountId: string
-  ): Promise<{ totalEquity: number; timestamp: number }> => {
+  getTotalEquity: async (accountId: string): Promise<EquityResponse> => {
     const { data } = await api.get(`/accounts/${accountId}/equity`)
     return data
   },
